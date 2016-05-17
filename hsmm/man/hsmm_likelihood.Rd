@@ -4,8 +4,8 @@
 \alias{hsmm_likelihood}
 \title{Hidden semi-Markov likelihood function Pre-defined dwell time distributions for HSMM models}
 \usage{
-hsmm_likelihood(pars, type, data, mv, dtf, fct_dmat, fct_delta,
-  omega = matrix(c(0, 1, 1, 0), byrow = T, ncol = 2), debug = FALSE)
+hsmm_likelihood(pars, type, data, ddl, dtf, fct_gamma, fct_dmat, fct_delta,
+  pformula, omega, debug = FALSE)
 }
 \arguments{
 \item{pars}{parameter vector}
@@ -13,8 +13,6 @@ hsmm_likelihood(pars, type, data, mv, dtf, fct_dmat, fct_delta,
 \item{type}{vector with number of parameters in each of the mv dwell time distributions followed by number of parameters in state dependent observation matrix (dmat) and initial vector (delta)}
 
 \item{data}{matrix of observations; row is a sequence; column is an occasion; value is 1 to k where k is number of possible observations which match rows of dmat}
-
-\item{mv}{vector with number of steps (m_i) for each dwell time distribution; length of mv is m - the number of states}
 
 \item{dtf}{list of length m with a function for each state}
 
@@ -25,6 +23,8 @@ hsmm_likelihood(pars, type, data, mv, dtf, fct_dmat, fct_delta,
 \item{omega}{known m by m state transition matrix}
 
 \item{debug}{if TRUE, prints the parameter values and -log likelihood}
+
+\item{mv}{vector with number of steps (m_i) for each dwell time distribution; length of mv is m - the number of states}
 }
 \value{
 negative log-likelihood value

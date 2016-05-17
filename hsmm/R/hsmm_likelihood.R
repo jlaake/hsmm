@@ -53,20 +53,15 @@
 #' mv=c(1,8,6,2),fct_dmat=fct_dmat,fct_delta=fct_delta)
 
 #'  }
-hsmm_likelihood=function(pars,type,data,mv,dtf,fct_dmat,fct_delta,omega=matrix(c(0,1,1,0),byrow=T,ncol=2),debug=FALSE)
+hsmm_likelihood=function(pars,type,data,ddl,dtf,fct_gamma,fct_dmat,fct_delta,pformula,omega,debug=FALSE)
 {
 	T=ncol(data)
 	pars=split(pars,rep(1:length(type),type))
-	# create transition matrix calling list of dwell time distributions and then hsmm2hmm 
-	gamma=gamma_dtd(pars=pars[1:length(mv)],dtf,mv,omega=omega)
-	# at present gamma is assumed to be constant across individuals and time but R_HMMLikelihood accepts
-	# a 4-d array which has an m by m matrix for each individual (dim 1) and occasion (dim 2)
-	gamma=aperm(array(rep(gamma,nrow(data)*T),dim=c(dim(gamma),nrow(data),T)),c(3,4,1,2))
+	mv=sapply(dtf,function(x) x$steps)
+	# create transition matrix calling list of dwell time distributions and then hsmm2hmm in fct_gamma
+	gamma=fct_gamma(pars=pars[1:length(mv)],type=type[1:length(mv)],dtf=dtf,ddl=ddl,mv=mv,omega=omega)
 	# create state dependent observation matrix
-	dmat=dmat_hsmm2hmm(fct_dmat(pars=pars[[length(mv)+1]]),mv)
-	# at present dmat is assumed to be constant across individuals and time but R_HMMLikelihood accepts
-	# a 4-d array which has an k (observations) by m (states) matrix for each individual (dim 1) and occasion (dim 2)
-	dmat=aperm(array(rep(dmat,nrow(data)*T),dim=c(dim(dmat),nrow(data),T)),c(3,4,1,2))
+	dmat=fct_dmat(pars=pars[[length(mv)+1]],pformula,ddl,mv)
 	# create initial state matrix
 	if(length(pars)==length(mv)+2)
     	delta=fct_delta(pars=pars[length(mv)+2],mv,nrow(data))

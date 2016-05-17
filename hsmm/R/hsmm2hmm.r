@@ -54,7 +54,7 @@ gamma_dtd=function(pars, dtf, mv, omega)
 	if(length(mv)!=length(dtf)) stop("Internal error: mv and dtf do not match")
 	dm=vector("list",length=length(mv))
 	for(i in 1:length(mv))
-		dm[[i]]=dtf[[i]](pars[[i]], mv[i])
+		dm[[i]]=dtf[[i]]$fct(pars[[i]], mv[i])
 	return(hsmm2hmm(omega, dm))
 }
 #' Create expanded state-dependent observation matrix for HMM from HSMM
