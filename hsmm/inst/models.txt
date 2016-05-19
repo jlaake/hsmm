@@ -1,0 +1,3 @@
+model	num	strata	cjs	IShmm	accumulate
+NULL	-1	FALSE	FALSE	FALSE	FALSE
+ATTEND	-1	TRUE	FALSE	TRUE	FALSE

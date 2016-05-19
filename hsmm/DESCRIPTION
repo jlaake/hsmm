@@ -4,7 +4,7 @@ Date: 2016-5-10
 Title: Hidden Semi-Markov Models
 Author: Jeff Laake <jeff.laake@noaa.gov>
 Maintainer: Jeff Laake <Jeff.Laake@noaa.gov>
-Description: Functions for fitting hidden semi-Markov models with 
+Description: Function toolbox for fitting hidden semi-Markov models with 
     known transition matrices and user-specified dwell time distributions.
 Depends:
     R (>= 2.15.0)
@@ -12,8 +12,6 @@ Imports:
     graphics,
     stats,
     utils,
-    truncnorm,
-    coda,
     Matrix,
     numDeriv,
     expm,

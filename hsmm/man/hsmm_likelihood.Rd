@@ -5,7 +5,7 @@
 \title{Hidden semi-Markov likelihood function Pre-defined dwell time distributions for HSMM models}
 \usage{
 hsmm_likelihood(pars, type, data, ddl, dtf, fct_gamma, fct_dmat, fct_delta,
-  pformula, omega, debug = FALSE)
+  pformula, omega, debug = FALSE, mat = FALSE)
 }
 \arguments{
 \item{pars}{parameter vector}
@@ -24,10 +24,12 @@ hsmm_likelihood(pars, type, data, ddl, dtf, fct_gamma, fct_dmat, fct_delta,
 
 \item{debug}{if TRUE, prints the parameter values and -log likelihood}
 
+\item{mat}{if TRUE, return matrices rather than -log likelihood}
+
 \item{mv}{vector with number of steps (m_i) for each dwell time distribution; length of mv is m - the number of states}
 }
 \value{
-negative log-likelihood value
+negative log-likelihood value or list of matrices depending on value of mat
 }
 \description{
 Various discrete dwell time distributions defined in Zucchini et al second edition

@@ -1,0 +1,4 @@
+model	parname	begin	num	default	type	link	formula	bystratum	tostrata	cjs	whichlevel	interval	nointercept	include	mlogit	obs
+NULL	dummy	0	0	0	Triang	logit	~1	FALSE	FALSE	FALSE	0	FALSE	FALSE	""	""	FALSE
+ATTEND	p	0	0	0	Triang	logit	~1	TRUE	FALSE	TRUE	0	FALSE	FALSE	""	""	FALSE
+ATTEND	dt	0	0	0	Triang	logit	~1	TRUE	FALSE	TRUE	0	FALSE	FALSE	""	""	FALSE

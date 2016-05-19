@@ -11,10 +11,12 @@
 #' @param fct_delta function that specifies the initial probability vector
 #' @param omega known m by m state transition matrix
 #' @param debug if TRUE, prints the parameter values and -log likelihood
-#' @return negative log-likelihood value
+#' @param mat if TRUE, return matrices rather than -log likelihood
+#' @return negative log-likelihood value or list of matrices depending on value of mat
 #' @author Jeff Laake
 #' @export hsmm_likelihood
 #' @keywords utility
+#' @useDynLib hsmm
 #' @references Zucchini, W., MacDonald, I.L. and Langrock, R. 2016. Hidden Markov Models for Time Series: 
 #' An introduction using R, 2nd ed. CRC Press.
 #' @examples
@@ -53,7 +55,7 @@
 #' mv=c(1,8,6,2),fct_dmat=fct_dmat,fct_delta=fct_delta)
 
 #'  }
-hsmm_likelihood=function(pars,type,data,ddl,dtf,fct_gamma,fct_dmat,fct_delta,pformula,omega,debug=FALSE)
+hsmm_likelihood=function(pars,type,data,ddl,dtf,fct_gamma,fct_dmat,fct_delta,pformula,omega,debug=FALSE,mat=FALSE)
 {
 	T=ncol(data)
 	pars=split(pars,rep(1:length(type),type))
@@ -67,8 +69,10 @@ hsmm_likelihood=function(pars,type,data,ddl,dtf,fct_gamma,fct_dmat,fct_delta,pfo
     	delta=fct_delta(pars=pars[length(mv)+2],mv,nrow(data))
 	else
 		delta=fct_delta(pars=NULL,mv,nrow(data))
+	if(mat)return(list(gamma=gamma,dmat=dmat,delta=delta))
 	if(debug) sapply(pars,function(x) cat("\n",x))   
-	neglnl=-sum(R_HMMLikelihood(x=data,first=rep(1,nrow(data)),m=sum(mv),T=T,dmat,gamma,delta)$lnl)
+	neglnl=hmm.lnl(x=data,start=rep(1,nrow(data)),m=sum(mv),T=T,dmat,gamma,delta,freq=rep(1,nrow(data)),debug=FALSE)
+	#neglnl=-sum(R_HMMLikelihood(x=data,first=rep(1,nrow(data)),m=sum(mv),T=T,dmat,gamma,delta)$lnl)
 	if(debug)cat("\n -lnl=",neglnl)
 	return(neglnl)
 }
