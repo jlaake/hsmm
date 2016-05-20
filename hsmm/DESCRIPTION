@@ -7,15 +7,14 @@ Maintainer: Jeff Laake <Jeff.Laake@noaa.gov>
 Description: Function toolbox for fitting hidden semi-Markov models with 
     known transition matrices and user-specified dwell time distributions.
 Depends:
-    R (>= 2.15.0)
+    R (>= 2.15.0), optimx (>= 2013.8.6)
 Imports:
     graphics,
     stats,
     utils,
     Matrix,
     numDeriv,
-    expm,
-    optimx (>= 2013.8.6)
+    expm
 LazyLoad: yes
 License: GPL (>=2)
 RoxygenNote: 5.0.1

@@ -51,8 +51,9 @@ dt.values=function(dtf,n,theta)
 		z=1-values[m]/(1-sum(values[1:(m-1)]))
 	else
 		z=1-values[m]
-	values[(m+1):n]=values[m]*z^((m+1):n-m)
-	return(values)
+	if(n>m+1)
+	   values[(m+1):n]=values[m]*z^((m+1):n-m)
+	return(values[1:n])
 }
 
 plot_dt=function(object,range,dm=NULL,labels=NULL,...)

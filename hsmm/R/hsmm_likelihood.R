@@ -19,7 +19,6 @@
 #' @useDynLib hsmm
 #' @references Zucchini, W., MacDonald, I.L. and Langrock, R. 2016. Hidden Markov Models for Time Series: 
 #' An introduction using R, 2nd ed. CRC Press.
-
 hsmm_likelihood=function(pars,type,data,ddl,dtf,fct_gamma,fct_dmat,fct_delta,pformula,omega,debug=FALSE,mat=FALSE)
 {
 	T=ncol(data)

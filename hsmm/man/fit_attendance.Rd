@@ -37,7 +37,8 @@ and omega (known state transition matrix).
 \examples{
 { 
 data(attendance)
-attendance=attendance[attendance$year==1999,]
+# use first 10 records from 1999 to keep execution time reasonable
+attendance=attendance[attendance$year==1999,][1:10,]
 # 4 state model - pre-birth, birth period, at sea, on land
 omega=matrix(c(0,1,0,0,0,0,1,0,0,0,0,1,0,0,1,0),byrow=TRUE,ncol=4)
 # strata.labels only used to create values in design data; values in encounter history are just 
@@ -67,12 +68,12 @@ ddl$p$birth=ifelse(ddl$p$stratum=="P",0,1)
 # specify shifted poisson distributions for each state with different numbers of steps
 state1=list(fct=shifted_poisson,steps=25,formula=~1)
 state2=list(fct=shifted_poisson,steps=12,formula=~1)
-state3=list(fct=shifted_poisson,steps=6,formula=~period)
-state4=list(fct=shifted_poisson,steps=3,formula=~period)
+state3=list(fct=shifted_poisson,steps=6,formula=~1)
+state4=list(fct=shifted_poisson,steps=3,formula=~1)
 dtf=list(state1,state2,state3,state4)
-model<-fit_attendance(xp$ehmat,ddl=ddl,dtf=dtf,pformula=~birth,omega=omega,debug=TRUE)
+system.time(model<-fit_attendance(xp$ehmat,ddl=ddl,dtf=dtf,pformula=~birth,omega=omega,debug=TRUE,initial=c(2,2,1,0,-2,3)))
 par(mfrow=c(2,2))
-plot_dt(model,range=15,labels=c("pre-birth","birth","at sea","on land"))
+plot_dt(model,range=c(30,18,10,6),labels=c("pre-birth","birth","at sea","on land"))
 }
 }
 \author{
