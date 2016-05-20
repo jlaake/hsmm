@@ -1,71 +1,4 @@
 
-fit_attendance=function(df,ddl,dtf,pformula,omega,initial=NULL,method="nlminb",debug=FALSE)
-{
-	# define functions fct_gamma,fct_dmat,fct_delta
-	fct_dmat=function(pars,pformula,ddl,mv)
-	{
-		nobs= length(levels(ddl$p$id))
-		nocc=length(levels(ddl$p$time))
-		dm=model.matrix(pformula,ddl$p)
-		p=plogis(dm%*%pars)
-		p[!is.na(ddl$p$fix)]=ddl$p$fix[!is.na(ddl$p$fix)]
-		xx=lapply(split(p,list(ddl$p$id,ddl$p$occ)),function(x) 
-					dmat_hsmm2hmm(matrix(c(1-x[1],x[1],1-x[2],x[2],1-x[3],x[3],1-x[4],x[4]),nrow=2),mv=mv))
-		zz=aperm(array(as.vector(do.call("cbind",xx)),dim=c(2,sum(mv),nobs,nocc)),c(3,4,1,2))
-		return(zz)	
-	}
-    fct_gamma=function(pars,type,dtf,ddl,mv,omega)
-	{
-		nobs= length(levels(ddl$dt$id))
-		nocc=length(levels(ddl$dt$time))
-		dt=matrix(NA,nrow=nobs*nocc,ncol=length(dtf))
-		for(i in 1:length(mv))
-		{
-			dm=model.matrix(dtf[[i]]$formula,ddl$dt[as.numeric(ddl$dt$stratum)==i,])
-			dt[,i]=dm%*%pars[[i]]
-		}
-		xx=apply(dt,1, function(x) as.vector(hsmm:::gamma_dtd(split(x,1:length(dtf)),dtf,mv,omega)))
-		xx=aperm(array(xx,dim=c(sum(mv),sum(mv),nobs,nocc)),c(3,4,1,2))
-		return(xx)
-	}
-	
-	fct_delta=function(pars,mv,nr)
-		matrix(c(1,rep(0,sum(mv)-1)),byrow=T,ncol=sum(mv),nrow=nr)
-  # compute number of parameters
-  type=vector("numeric",length(dtf))
-  cnames=NULL
-  for (i in 1:length(dtf))
-  {
-	  dm=model.matrix(dtf[[i]]$formula,ddl$dt[as.numeric(ddl$dt$stratum)==i,])
-	  if(!is.null(ddl$dt$fix))dm[!is.na(ddl$dt$fix[as.numeric(ddl$dt$stratum)==i]),]=0
-	  dm=dm[,colSums(dm)!=0,drop=FALSE]
-	  cnames=c(cnames,paste("state",i,":",colnames(dm),sep=""))
-	  type[i]=ncol(dm)
-  }
-  dm=model.matrix(pformula,ddl$p)
-  if(!is.null(ddl$p$fix))dm[!is.na(ddl$p$fix),]=0
-  dm=dm[,colSums(dm)!=0,drop=FALSE]
-  cnames=c(cnames,paste("p:",colnames(dm),sep=""))
-  type=c(type,ncol(dm))
-  if(is.null(initial))
-	  initial=rep(0,sum(type))
-  else
-	  if(length(initial)!=sum(type)) 
-		  stop(paste("initial parameter vector not correct length. Should be length",sum(type)))
-# call optim to fit model
-  fit=optimx(initial,type=type,hsmm_likelihood,data=df,ddl=ddl,
-					dtf=dtf,omega=omega,pformula=pformula,fct_gamma=fct_gamma,fct_dmat=fct_dmat,fct_delta=fct_delta,
-					method=method,debug=debug)
-  par=as.matrix(fit[,1:sum(type)])[1,]
-  names(par)=cnames
-  vc=solve(attr(fit,"details")[,"nhatend"][[1]])
-  rownames(vc)=cnames
-  colnames(vc)=cnames
-  results=list(data=df,ddl=ddl,dtf=dtf,pformula=pformula,type=type,omega=omega,fct_gamma=fct_gamma,fct_dmat=fct_dmat,fct_delta=fct_delta,
-		  results=list(par=par,vc=vc,fit=fit))
-  return(results)
-}
-
 
 # code that created data; requires database and CIPinnipedAnalysis and CalcurData packages
 create.data=FALSE
@@ -167,17 +100,3 @@ state4=list(fct=geometric,steps=1,formula=~1)
 dtf=list(state1,state2,state3,state4)
 
 
-
-
-dt.values=function(range,dm)
-{
-	dtpar=sum(pars[[i]]*dm)
-	m=object$dtf[[i]]$steps
-	values=object$dtf[[i]]$fct(dtpar,range)
-	if(m>1)
-		z=1-values[m]/(1-sum(values[1:(m-1)]))
-	else
-		z=1-values[m]
-	values[(m+1):range]=values[m]*z^((m+1):range-m)
-	return(values)
-}

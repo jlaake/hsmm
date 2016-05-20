@@ -9,7 +9,7 @@ global_decode(object, ddl = NULL, state.names = NULL)
 \arguments{
 \item{object}{fitted crm model (must be an HMM model)}
 
-\item{ddl}{design data list; will be computed if NULL}
+\item{ddl}{design data list}
 
 \item{state.names}{names for states used to label output; if NULL uses strata.labels + Dead state}
 }

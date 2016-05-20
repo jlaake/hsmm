@@ -55,8 +55,9 @@ dt.values=function(dtf,n,theta)
 	return(values)
 }
 
-plot_dt=function(object,range,dm,labels=NULL,...)
+plot_dt=function(object,range,dm=NULL,labels=NULL,...)
 {
+	if(is.null(dm))dm=lapply(1:length(object$dtf),function(x) matrix(c(1),nrow=1))
 	if(is.null(labels))labels=paste("state",1:length(object$dtf))
 	pars=split(object$results$par,rep(1:length(object$type),object$type))
 	if(length(range)==1)range=rep(range,length(object$dtf))
