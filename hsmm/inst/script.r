@@ -67,19 +67,6 @@ fit_attendance=function(df,ddl,dtf,pformula,omega,initial=NULL,method="nlminb",d
 }
 
 
-plot_dt=function(object,range,dm,labels=NULL,...)
-{
-	if(is.null(labels))labels=paste("state",1:length(object$dtf))
-	pars=split(object$results$par,rep(1:length(object$type),object$type))
-	for (i in 1:length(object$dtf))
-	{
-		   plot(1:range,sapply(range, function(x) object$dtf[[i]]$fct(sum(pars[[i]]*dm[[i]][1,]),x)),xlab="Time",ylab=paste("Dwell time distribution:",labels[i]),type="l",...) 
-		   if(nrow(dm[[i]])>1)
-		   lines(1:range,sapply(range, function(x) object$dtf[[i]]$fct(sum(pars[[i]]*dm[[i]][2,]),x)),lty=2,pch=2,type="l",...) 
-	}
-}
-
-
 # code that created data; requires database and CIPinnipedAnalysis and CalcurData packages
 create.data=FALSE
 if(create.data)
@@ -163,6 +150,9 @@ dtf=list(state1,state2,state3,state4)
 
 model3<-fit_attendance(xp$ehmat,ddl=ddl,dtf=list(state1,state2,state3,state4),pformula=~birth:year,omega=omega,debug=TRUE,initial=init)
 
+plot_dt(model2,range=c(45,15,15,10),dm=list(matrix(c(1,0),nrow=1),matrix(c(1,0),nrow=1),matrix(c(1,0,1,1),nrow=2,byrow=T),matrix(c(1,0,1,1),nrow=2,byrow=T)),labels=c("pre-birth","birth","at sea","on land"))
+
+
 # plot distributions
 dev.new()
 par(mfrow=c(2,2))
@@ -176,3 +166,18 @@ state3=list(fct=geometric,steps=1,formula=~1)
 state4=list(fct=geometric,steps=1,formula=~1)
 dtf=list(state1,state2,state3,state4)
 
+
+
+
+dt.values=function(range,dm)
+{
+	dtpar=sum(pars[[i]]*dm)
+	m=object$dtf[[i]]$steps
+	values=object$dtf[[i]]$fct(dtpar,range)
+	if(m>1)
+		z=1-values[m]/(1-sum(values[1:(m-1)]))
+	else
+		z=1-values[m]
+	values[(m+1):range]=values[m]*z^((m+1):range-m)
+	return(values)
+}
