@@ -19,4 +19,16 @@ vector of probabilities for dwell times from approximation using geometric tail
 \description{
 Compute dwell time distribution function values for HSMM models
 }
+\examples{
+par(mfrow=c(2,1))
+plot(1:10,shifted_poisson(log(2),10),ylab="Probability mass d(r)",
+   xlab="Time steps (r)",main="",type="b",pch=1,yaxt="n")
+x=dt.values(dtf=list(fct=shifted_poisson,steps=2),10,theta=log(2))
+lines(x,type="b",lty=2,pch=2)
+plot(1:10,shifted_poisson(log(2),10),ylab="Probability mass d(r)",
+  xlab="Time steps (r)",main="",type="b",pch=1,yaxt="n")
+x=dt.values(dtf=list(fct=shifted_poisson,steps=3),10,theta=log(2))
+lines(x,type="b",lty=2,pch=2)
+
+}
 
