@@ -14,19 +14,23 @@ hsmm_likelihood(pars, type, data, ddl, dtf, fct_gamma, fct_dmat, fct_delta,
 
 \item{data}{matrix of observations; row is a sequence; column is an occasion; value is 1 to k where k is number of possible observations which match rows of dmat}
 
+\item{ddl}{design data list of dwell time dataframe (dt) and sighting probability dataframe (p)}
+
 \item{dtf}{list of length m with a function for each state}
+
+\item{fct_gamma}{function that specifies the ttansition matrix (gamma)}
 
 \item{fct_dmat}{function that specifies the state dependent observation matrix (dmat)}
 
 \item{fct_delta}{function that specifies the initial probability vector}
+
+\item{pformula}{formula to be applied to ddl$p to create the design matrix for the sighting probability model}
 
 \item{omega}{known m by m state transition matrix}
 
 \item{debug}{if TRUE, prints the parameter values and -log likelihood}
 
 \item{mat}{if TRUE, return matrices rather than -log likelihood}
-
-\item{mv}{vector with number of steps (m_i) for each dwell time distribution; length of mv is m - the number of states}
 }
 \value{
 negative log-likelihood value or list of matrices depending on value of mat

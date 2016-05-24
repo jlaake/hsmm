@@ -56,19 +56,11 @@ then those values can be changed to 0.
 The following variable names are reserved and should not be used in the data:
 occ,age,time,cohort,Age,Time,Cohort,Y,Z,initial.age,begin.time,time.interval,fix
 }
-\examples{
-\donttest{
-# This example is excluded from testing to reduce package check time
-data(dipper)
-dipper.proc=process.data(dipper)
-ddl=make.design.data(dipper.proc)
-}
-}
 \author{
 Jeff Laake
 }
 \seealso{
-\code{\link{process.data}},\code{\link{merge_design.covariates}}
+\code{\link{process.data}}
 }
 \keyword{utility}
 

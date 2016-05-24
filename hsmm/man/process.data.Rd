@@ -78,7 +78,7 @@ factor covariates (e.g., sex), 2) define time intervals between capture
 occasions (if not 1), and 3) create an age structure for the data, if any.
 }
 \details{
-For examples of \code{data}, see \code{\link{dipper}}. The structure of the
+For examples of \code{data}, see \code{\link{attendance}}. The structure of the
 encounter history and the analysis depends on the analysis model to some
 extent. Thus, it is necessary to process a dataframe with the encounter
 history (\code{ch}) and a chosen \code{model} to define the relevant values.
@@ -89,7 +89,7 @@ The default time interval is unit time (1) and if this is
 adequate, the function will assign the appropriate length.  A processed data
 frame can only be analyzed using the model that was specified.  The
 \code{model} value is used by the functions \code{\link{make.design.data}}
-and \code{\link{crm}} to define the model structure as it relates to the
+to define the model structure as it relates to the
 data. Thus, if the data are going to be analysed with different underlying
 models, create different processed data sets with the model name as an
 extension.  For example, \code{dipper.cjs=process.data(dipper)}.
@@ -158,19 +158,8 @@ freq (number of animals with that ch/data)
 The following variable names are reserved and should not be used in the data:
 occ,age,time,cohort,Age,Time,Cohort,Y,Z,initial.age,begin.time,time.interval,fix
 }
-\examples{
-
-
-data(dipper)
-dipper.process=process.data(dipper)
-accumulate_data(dipper)
-
-}
 \author{
 Jeff Laake
-}
-\seealso{
-\code{\link{dipper}},\code{\link{crm}}
 }
 \keyword{utility}
 

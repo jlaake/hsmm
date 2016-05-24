@@ -40,7 +40,7 @@ needed to fit capture-recapture models (crm) which currently includes "cjs"
 Before jumping into the details it is useful to have an understanding of the
 differences between MARK (via the \code{mark in RMark} function) and the
 package \code{mra} written by Trent McDonald and how they relate to the
-implementation in \code{\link{cjs}}.  With MARK, animals can be placed in
+implementation in cjs in the marked package.  With MARK, animals can be placed in
 groups and the parameters for the model specified via PIMs (parameter
 index matrices) link the parameters to the specific animals.  For
 example, if for a particular group the \code{Phi} PIM is
@@ -172,7 +172,7 @@ Note that the order of the columns for \code{Phi.dmdf} differs slightly from
 what is shown above. Also, \code{plogis} is an R function that computes the
 inverse-logit. Once you have the matrix of \code{Phi} and \code{p} values
 the calculation of the likelihood is straightforward using the formulation
-of Pledger et al. (2003) (see \code{\link{cjs.lnl}}). The values in the
+of Pledger et al. (2003) (see cjs.lnl in marked package). The values in the
 design dataframe are not limited to these fields.  The 2 arguments
 \code{time.varying} and \code{fields} are vectors of character strings which
 specify the names of the dataframe columns in \code{x} that should be

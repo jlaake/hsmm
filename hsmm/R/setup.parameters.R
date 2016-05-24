@@ -68,7 +68,7 @@ setup.parameters <-
 # ----------------------------------------------------------------------------------------
 {
 # Read in parameter definitions
-	fdir=system.file(package="marked")	
+	fdir=system.file(package="hsmm")	
 	fdir=file.path(fdir,"parameters.txt")	
 	parameter_definitions=read.delim(fdir,header=TRUE,
 			colClasses=c("character","character",rep("numeric",3),rep("character",3),

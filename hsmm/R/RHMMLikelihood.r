@@ -11,8 +11,6 @@
 #' @param dmat observation probability matrices
 #' @param gamma transition matrices
 #' @param delta initial distribution
-#' @param object fitted hmm model
-#' @param ddl design data list; will be computed if NULL
 #' @export R_HMMLikelihood
 #' @return return log-likelihood, alpha, v and phi arrays 
 #' @author Jeff Laake <jeff.laake@@noaa.gov>

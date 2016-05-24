@@ -30,18 +30,6 @@ specified. Will handle character and numeric values in ch. Results will differ d
 capture history matrix back into a character vector. Argument can either be a capture history matrix (chmat) or a dataframe (data)
 that contains fields with a specified prefix.
 }
-\examples{
-data(dipper)
-# following returns a matrix
-chmat=splitCH(dipper$ch)
-# following returns the original dataframe with the ch split into columns
-newdipper=splitCH(data=dipper)
-# following collapses chmat
-ch=collapseCH(chmat)
-# following finds fields in newdipper and creates ch
-newdipper$ch=NULL
-newdipper=collapseCH(data=newdipper)
-}
 \author{
 Devin Johnson; Jeff Laake
 }

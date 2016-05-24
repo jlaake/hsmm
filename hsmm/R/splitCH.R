@@ -19,17 +19,6 @@
 #' @return A data frame if data specified and a matrix if vector ch is specified
 #' @export splitCH collapseCH
 #' @author Devin Johnson; Jeff Laake
-#' @examples
-#' data(dipper)
-#' # following returns a matrix
-#' chmat=splitCH(dipper$ch)
-#' # following returns the original dataframe with the ch split into columns
-#' newdipper=splitCH(data=dipper)
-#' # following collapses chmat
-#' ch=collapseCH(chmat)
-#' # following finds fields in newdipper and creates ch
-#' newdipper$ch=NULL
-#' newdipper=collapseCH(data=newdipper)
 
 splitCH <- function(x="ch", data=NULL, prefix="Time"){
 #   Set value of ch depending on what arguments are set

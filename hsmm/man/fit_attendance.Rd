@@ -42,10 +42,12 @@ attendance=attendance[attendance$year==1999,][1:10,]
 # 4 state model - pre-birth, birth period, at sea, on land
 omega=matrix(c(0,1,0,0,0,0,1,0,0,0,0,1,0,0,1,0),byrow=TRUE,ncol=4)
 # strata.labels only used to create values in design data; values in encounter history are just 
-# 0 (not seen) or 1 (seen) and not strata values;  encounter history is converted to 1 (not seen) and 2 (seen)
+# 0 (not seen) or 1 (seen) and not strata values;  encounter history is converted to
+# 1 (not seen) and 2 (seen)
 # process data
 xp=process.data(attendance,model="ATTEND",strata.labels=c("P","B","S","L"))
-# make design data and then delete fields that aren't used including fix which has default settings that
+# make design data and then delete fields that aren't used including fix 
+# which has default settings that
 # are not useful for this model
 ddl=make.design.data(xp)
 # fixed real values
@@ -71,7 +73,8 @@ state2=list(fct=shifted_poisson,steps=12,formula=~1)
 state3=list(fct=shifted_poisson,steps=6,formula=~1)
 state4=list(fct=shifted_poisson,steps=3,formula=~1)
 dtf=list(state1,state2,state3,state4)
-system.time(model<-fit_attendance(xp$ehmat,ddl=ddl,dtf=dtf,pformula=~birth,omega=omega,debug=TRUE,initial=c(2,2,1,0,-2,3)))
+system.time(model<-fit_attendance(xp$ehmat,ddl=ddl,dtf=dtf,pformula=~birth,
+                omega=omega,debug=TRUE,initial=c(2,2,1,0,-2,3)))
 par(mfrow=c(2,2))
 plot_dt(model,range=c(30,18,10,6),labels=c("pre-birth","birth","at sea","on land"))
 }

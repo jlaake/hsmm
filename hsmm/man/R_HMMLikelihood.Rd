@@ -20,10 +20,6 @@ R_HMMLikelihood(x, first, m, T, dmat, gamma, delta)
 \item{gamma}{transition matrices}
 
 \item{delta}{initial distribution}
-
-\item{object}{fitted hmm model}
-
-\item{ddl}{design data list; will be computed if NULL}
 }
 \value{
 return log-likelihood, alpha, v and phi arrays

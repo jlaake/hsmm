@@ -42,8 +42,11 @@ model=fit_attendance(xp$ehmat,ddl=ddl,dtf=list(state1,state2,state3,state4),
 		  pformula=~birth:year,omega=omega,debug=TRUE,initial=init)
 # plot dwell time distributions
 dev.new()
-par(mfrow=c(2,2))
+png("plots.png",pointsize=10,width=960,height=960)
+par(mfrow=c(2,2),cex=1.5,cex.axis=1.5,cex.lab=1.5)
 plot_dt(model,range=c(45,15,15,10),dm=list(matrix(c(1,0),nrow=1),matrix(c(1,0),nrow=1),matrix(c(1,0,1,1),nrow=2,byrow=T),matrix(c(1,0,1,1),nrow=2,byrow=T)),labels=c("pre-birth","birth","at sea","on land"))
+dev.off()
+
 # global decode to get state predictions
 status=global_decode(model,ddl,state.names=c("P","B","S","L"))
 # display histogram of birth timing

@@ -6,15 +6,11 @@
 #' 
 #' @param theta parameter vector for dwell time distributions 
 #' @param n number of discrete states for dwell time  
-#' @param dtf dwell time distribution list
-#' @param range single value or vector of values with length = number of states; range value used from 1:range to plot distribution
-#' @param fitted hsmm model object object
-#' @param dm vector for combining parameter values for dt distribution
-#' @param labels labels to be used for states in plotting
-#' @return vector of probabilities for well times
+#' @return vector of probabilities for dwell times
 #' @author Jeff Laake
-#' @export geometric shifted_poisson shifted_negbinomial shifted_binomial unstructured unstructured_gt dt.values plot_dt
+#' @export geometric shifted_poisson shifted_negbinomial shifted_binomial unstructured unstructured_gt 
 #' @keywords utility
+#' @aliases shifted_poisson shifted_negbinomial shifted_binomial unstructured_gt unstructured
 #' @references Zucchini, W., MacDonald, I.L. and Langrock, R. 2016. Hidden Markov Models for Time Series: 
 #' An introduction using R, 2nd ed. CRC Press.
 geometric=function(theta,n)
@@ -43,6 +39,13 @@ unstructured=function(theta,n)
 	p=p/sum(p)
 	return(p)
 }
+#' Compute dwell time distribution function values for HSMM models
+#' 
+#' @param theta parameter vector for dwell time distributions 
+#' @param n number of discrete states for dwell time  
+#' @param dtf dwell time distribution function
+#' @return vector of probabilities for dwell times from approximation using geometric tail
+#' @export
 dt.values=function(dtf,n,theta)
 {
 	m=dtf$steps
@@ -55,7 +58,15 @@ dt.values=function(dtf,n,theta)
 	   values[(m+1):n]=values[m]*z^((m+1):n-m)
 	return(values[1:n])
 }
-
+#' Plot dwell time distributions for HSMM models
+#' 
+#' @param object fitted hsmm model object object
+#' @param range single value or vector of values with length = number of states; range value used from 1:range to plot distribution
+#' @param dm vector for combining parameter values for dt distribution
+#' @param labels labels to be used for states in plotting
+#' @param ... plot parameters
+#' @return none
+#' @export
 plot_dt=function(object,range,dm=NULL,labels=NULL,...)
 {
 	if(is.null(dm))dm=lapply(1:length(object$dtf),function(x) matrix(c(1),nrow=1))
@@ -69,6 +80,7 @@ plot_dt=function(object,range,dm=NULL,labels=NULL,...)
 			for(j in 2:nrow(dm[[i]]))
 				lines(1:range[i],dt.values(object$dtf[[i]],range[i],sum(pars[[i]]*dm[[i]][j,])),lty=j,pch=j,type="b",...) 
 	}
+	invisible()
 }
 
 

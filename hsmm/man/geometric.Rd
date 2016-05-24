@@ -2,6 +2,11 @@
 % Please edit documentation in R/dwell_time_distributions.R
 \name{geometric}
 \alias{geometric}
+\alias{shifted_binomial}
+\alias{shifted_negbinomial}
+\alias{shifted_poisson}
+\alias{unstructured}
+\alias{unstructured_gt}
 \title{Pre-defined dwell time distributions for HSMM models}
 \usage{
 geometric(theta, n)
@@ -10,19 +15,9 @@ geometric(theta, n)
 \item{theta}{parameter vector for dwell time distributions}
 
 \item{n}{number of discrete states for dwell time}
-
-\item{dtf}{dwell time distribution list}
-
-\item{range}{single value or vector of values with length = number of states; range value used from 1:range to plot distribution}
-
-\item{fitted}{hsmm model object object}
-
-\item{dm}{vector for combining parameter values for dt distribution}
-
-\item{labels}{labels to be used for states in plotting}
 }
 \value{
-vector of probabilities for well times
+vector of probabilities for dwell times
 }
 \description{
 Various discrete dwell time distributions defined in Zucchini et al second edition.

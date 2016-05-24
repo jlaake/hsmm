@@ -5,10 +5,12 @@
 #' @param pars parameter vector  
 #' @param type vector with number of parameters in each of the mv dwell time distributions followed by number of parameters in state dependent observation matrix (dmat) and initial vector (delta)  
 #' @param data matrix of observations; row is a sequence; column is an occasion; value is 1 to k where k is number of possible observations which match rows of dmat
-#' @param mv vector with number of steps (m_i) for each dwell time distribution; length of mv is m - the number of states
+#' @param ddl design data list of dwell time dataframe (dt) and sighting probability dataframe (p)
 #' @param dtf list of length m with a function for each state
+#' @param fct_gamma function that specifies the ttansition matrix (gamma)
 #' @param fct_dmat function that specifies the state dependent observation matrix (dmat)
 #' @param fct_delta function that specifies the initial probability vector
+#' @param pformula formula to be applied to ddl$p to create the design matrix for the sighting probability model
 #' @param omega known m by m state transition matrix
 #' @param debug if TRUE, prints the parameter values and -log likelihood
 #' @param mat if TRUE, return matrices rather than -log likelihood

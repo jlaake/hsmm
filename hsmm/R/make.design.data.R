@@ -45,15 +45,8 @@
 #' model & data structure. In addition the value of parameters argument is saved as design.parameters.
 #' @author Jeff Laake
 #' @export
-#' @seealso \code{\link{process.data}},\code{\link{merge_design.covariates}}
+#' @seealso \code{\link{process.data}}
 #' @keywords utility
-#' @examples
-#' \donttest{
-#' # This example is excluded from testing to reduce package check time
-#' data(dipper)
-#' dipper.proc=process.data(dipper)
-#' ddl=make.design.data(dipper.proc)
-#' }
 "make.design.data" <-                                                      
 function(data,parameters=list())
 {
