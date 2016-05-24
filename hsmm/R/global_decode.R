@@ -22,6 +22,7 @@ global_decode=function(object,ddl=NULL,state.names=NULL)
 	m=ncol(dmat[1,1,,])
 	first=rep(1,nrow(x))
 	states=matrix(NA,nrow=nrow(x),ncol=T)
+	state.names=do.call("c",sapply(1:length(dtf),function(x) paste(state.names[x],1:object$dtf[[x]]$steps,sep="")))
 	for(i in 1:nrow(x))
 	{
 		psi=matrix(NA,nrow=T,ncol=m)

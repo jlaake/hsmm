@@ -1,50 +1,6 @@
-
-
-# code that created data; requires database and CIPinnipedAnalysis and CalcurData packages
-create.data=FALSE
-if(create.data)
-{
-	library(CIPinnipedAnalysis)
-	create_attendance=function(years,firstday=20,trim=TRUE)
-	{
-		#Firstday of June to 25 July
-		resights=getCalcurData(db="Zc", tbl="Alive")
-		df=NULL
-		for(year in years)
-		{
-			xx=get_attendance(resights,year=year,firstday=firstday)
-			x=t(apply(do.call("rbind",strsplit(xx$ch,"")),1,function(x) as.numeric(x)))
-			attendance=x
-			#only use those seen in last 7 days
-			rownames(attendance)=xx$brand
-			if(trim) attendance=attendance[which(!apply(attendance[,49:55],1,paste,collapse="")=="0000000"),]
-			df=rbind(df,attendance)
-		}
-		return(df)
-	}
-	data=NULL
-	firstday=25
-	for(year in 1999:2002)
-	{
-		df=create_attendance(year,firstday,trim=FALSE)
-		x=data.frame(ch=apply(df,1,paste,collapse=""),year=year,period="early",brand=rownames(df),stringsAsFactors=F)
-		data=rbind(data,x)
-	}
-	for(year in 2012:2015)
-	{
-		df=create_attendance(year,firstday,trim=FALSE)
-		x=data.frame(ch=apply(df,1,paste,collapse=""),year=year,period="late",brand=rownames(df),stringsAsFactors=F)
-		data=rbind(data,x)
-	}
-	data$year=factor(data$year)
-	data$period=factor(data$period)
-}
-
-
-
+# script that analyzes and displays graphs used in ISEC 2016 presentation
 library(hsmm)
-library(optimx)
-
+# get attendance data 
 data(attendance)
 # 4 state model - pre-birth, birth period, at sea, on land
 omega=matrix(c(0,1,0,0,0,0,1,0,0,0,0,1,0,0,1,0),byrow=TRUE,ncol=4)
@@ -55,9 +11,6 @@ xp=process.data(attendance,model="ATTEND",groups=c("year","period"),strata.label
 # make design data and then delete fields that aren't used including fix which has default settings that
 # are not useful for this model
 ddl=make.design.data(xp)
-# fixed real values
-ddl$p$fix=NULL
-ddl$dt$fix=NULL
 ddl$dt$cohort=NULL
 ddl$dt$Cohort=NULL
 ddl$dt$age=NULL
@@ -66,6 +19,9 @@ ddl$p$cohort=NULL
 ddl$p$Cohort=NULL
 ddl$p$age=NULL
 ddl$p$Age=NULL
+# fixed real values
+ddl$p$fix=NULL
+ddl$dt$fix=NULL
 # set p=0 for "S" at sea 
 ddl$p$fix=ifelse(ddl$p$stratum%in%c("P","L","B"),NA,0)
 # set p=0 for occasions in which not a single animal was seen; presumably no effort
@@ -73,30 +29,29 @@ for (year in c(1999:2002,2012:2015))
    ddl$p$fix[ddl$p$year==year][ddl$p$time[ddl$p$year==year]%in%which(colSums(xp$ehmat[xp$data$year==year,])==nrow(xp$ehmat[xp$data$year==year,]))]=0
 # create covariate for birth and on-land p
 ddl$p$birth=ifelse(ddl$p$stratum=="P",0,1)
-
-# geometric for pre-birth and on-land but shifted poisson for birth and at-sea
+# used shifted poisson functions for each state dwell time distribution
 state1=list(fct=shifted_poisson,steps=25,formula=~1)
 state2=list(fct=shifted_poisson,steps=12,formula=~1)
 state3=list(fct=shifted_poisson,steps=6,formula=~period)
 state4=list(fct=shifted_poisson,steps=3,formula=~period)
 dtf=list(state1,state2,state3,state4)
-
-model3<-fit_attendance(xp$ehmat,ddl=ddl,dtf=list(state1,state2,state3,state4),pformula=~birth:year,omega=omega,debug=TRUE,initial=init)
-
-plot_dt(model2,range=c(45,15,15,10),dm=list(matrix(c(1,0),nrow=1),matrix(c(1,0),nrow=1),matrix(c(1,0,1,1),nrow=2,byrow=T),matrix(c(1,0,1,1),nrow=2,byrow=T)),labels=c("pre-birth","birth","at sea","on land"))
-
-
-# plot distributions
+#NOTE:  It takes several hours to fit the model 
+init=c(  2.61279500,  1.99485100,  0.94510640,  0.25324590,  0.09476032,  0.22813880, -2.53685900,
+       3.76270700,  3.23724300,  3.28566300,  2.87230900,  2.26122200 , 2.75874700,  2.69134900, 2.9666820)
+model=fit_attendance(xp$ehmat,ddl=ddl,dtf=list(state1,state2,state3,state4),
+		  pformula=~birth:year,omega=omega,debug=TRUE,initial=init)
+# plot dwell time distributions
 dev.new()
 par(mfrow=c(2,2))
-plot_dt(model2,15,dm=list(matrix(c(1,0),nrow=1),matrix(c(1,0),nrow=1),matrix(c(1,0,1,1),nrow=2,byrow=T),matrix(c(1,0,1,1),nrow=2,byrow=T)),labels=c("pre-birth","birth","at sea","on land"))
- 
-		
-#std geometric model for all states
-state1=list(fct=geometric,steps=1,formula=~1)
-state2=list(fct=geometric,steps=1,formula=~1)
-state3=list(fct=geometric,steps=1,formula=~1)
-state4=list(fct=geometric,steps=1,formula=~1)
-dtf=list(state1,state2,state3,state4)
-
-
+plot_dt(model,range=c(45,15,15,10),dm=list(matrix(c(1,0),nrow=1),matrix(c(1,0),nrow=1),matrix(c(1,0,1,1),nrow=2,byrow=T),matrix(c(1,0,1,1),nrow=2,byrow=T)),labels=c("pre-birth","birth","at sea","on land"))
+# global decode to get state predictions
+status=global_decode(model,ddl,state.names=c("P","B","S","L"))
+# display histogram of birth timing
+dev.new()
+hist(apply(status,1,function(x) which(x=="B1")),xlab="Days from 25 May",ylab="Number of females giving birth",main="",cex.lab=1.5,cex.axis=1.5)
+# display barplot of proportion on land in July 
+dev.new()
+barplot(apply(status[,37:61],2,function(x) {
+					tab=table(substr(x,1,1))
+					1-tab[names(tab)=="S"]/sum(tab)
+				}),names=1:25, xlab="July date",ylab="Proportion on land",cex.axis=1.25,cex.lab=1.25)
