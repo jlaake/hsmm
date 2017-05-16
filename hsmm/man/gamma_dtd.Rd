@@ -22,4 +22,3 @@ expanded state transition matrix defining HSMM
 Create expanded transition matrix for HMM from aggregated state transition
 matrix (omega) and dwell time distributions (dtf) calling hsmm2hmm.
 }
-

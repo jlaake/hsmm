@@ -56,4 +56,3 @@ data$period=factor(data$period)
 }
 }
 \keyword{datasets}
-

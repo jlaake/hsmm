@@ -12,10 +12,12 @@
 #' @param pformula formula to be applied to ddl$p to create the design matrix for the sighting probability model
 #' @param omega an s by s matrix with known transition values between the states
 #' @param initial vector of parameter initial values; must equal number of parameters if provided
+#' @param log_prior a function of the parameter vector that returns the log prior distribution
 #' @param method method to be used with optim; currently only a single method is supported
 #' @param debug if TRUE will print out parameter values and negative log-likelihood value at current parameter values
 #' @param nll if TRUE will return -log_likelihood function instead of optimizing 
 #' @param mat if TRUE, return matrices rather than -log likelihood
+#' @param ... arguments to pass to 'optimx'
 #' for MLE infrence. Arguments 'method' and 'debug' will be ignored.
 #' @author Jeff Laake
 #' @import optimx
@@ -67,7 +69,7 @@
 #' par(mfrow=c(2,2))
 #' plot_dt(model,range=c(30,18,10,6),labels=c("pre-birth","birth","at sea","on land"))
 #' }
-fit_attendance=function(df,ddl,dtf,pformula,omega,initial=NULL,method="nlminb",debug=FALSE, nll=FALSE, mat=FALSE)
+fit_attendance=function(df,ddl,dtf,pformula,omega,initial=NULL, log_prior=NULL, method="Nelder-Mead",debug=FALSE, nll=FALSE, mat=FALSE, ...)
 {
   # define functions fct_gamma,fct_dmat,fct_delta
   fct_dmat=function(pars,pformula,ddl,mv)
@@ -121,17 +123,24 @@ fit_attendance=function(df,ddl,dtf,pformula,omega,initial=NULL,method="nlminb",d
     if(length(initial)!=sum(type)) 
       stop(paste("initial parameter vector not correct length. Should be length",sum(type)))
   # call optim to fit model
-  if(nll){
+  if(!is.null(log_prior)){
+    foo = function(pars){
+      hsmm:::hsmm_likelihood(pars,type=type,data=df,ddl=ddl,dtf=dtf,
+                             fct_gamma=fct_gamma,fct_dmat=fct_dmat,fct_delta=fct_delta,
+                             pformula=pformula,omega=omega,debug=debug,mat=mat) - log_prior(pars)
+    }
+  } else {
     foo = function(pars){
       hsmm:::hsmm_likelihood(pars,type=type,data=df,ddl=ddl,dtf=dtf,
                              fct_gamma=fct_gamma,fct_dmat=fct_dmat,fct_delta=fct_delta,
                              pformula=pformula,omega=omega,debug=debug,mat=mat)
     }
+  }
+  
+  if(nll){
     return(foo)
   } else{
-    fit=optimx(initial,type=type,hsmm_likelihood,data=df,ddl=ddl,
-               dtf=dtf,omega=omega,pformula=pformula,fct_gamma=fct_gamma,fct_dmat=fct_dmat,fct_delta=fct_delta,
-               method=method,debug=debug)
+    fit=optimx(initial,foo, method=method, ...)
     par=as.matrix(fit[,1:sum(type)])[1,]
     names(par)=cnames
     vc=solve(attr(fit,"details")[,"nhatend"][[1]])

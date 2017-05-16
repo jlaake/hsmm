@@ -56,11 +56,10 @@ then those values can be changed to 0.
 The following variable names are reserved and should not be used in the data:
 occ,age,time,cohort,Age,Time,Cohort,Y,Z,initial.age,begin.time,time.interval,fix
 }
-\author{
-Jeff Laake
-}
 \seealso{
 \code{\link{process.data}}
 }
+\author{
+Jeff Laake
+}
 \keyword{utility}
-

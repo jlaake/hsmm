@@ -23,4 +23,3 @@ none
 \description{
 Plot dwell time distributions for HSMM models
 }
-

@@ -2,11 +2,11 @@
 % Please edit documentation in R/dwell_time_distributions.R
 \name{geometric}
 \alias{geometric}
-\alias{shifted_binomial}
-\alias{shifted_negbinomial}
 \alias{shifted_poisson}
-\alias{unstructured}
+\alias{shifted_negbinomial}
+\alias{shifted_binomial}
 \alias{unstructured_gt}
+\alias{unstructured}
 \title{Pre-defined dwell time distributions for HSMM models}
 \usage{
 geometric(theta, n)
@@ -24,12 +24,11 @@ Various discrete dwell time distributions defined in Zucchini et al second editi
 Note: if you use unstructured without a geometric tail (gt), the number of dwell times must exceed the longest 
 observed sequence in the state or -lnl could become undefined (Nan).
 }
-\author{
-Jeff Laake
-}
 \references{
 Zucchini, W., MacDonald, I.L. and Langrock, R. 2016. Hidden Markov Models for Time Series: 
 An introduction using R, 2nd ed. CRC Press.
 }
+\author{
+Jeff Laake
+}
 \keyword{utility}
-

@@ -38,12 +38,11 @@ negative log-likelihood value or list of matrices depending on value of mat
 \description{
 Various discrete dwell time distributions defined in Zucchini et al second edition
 }
-\author{
-Jeff Laake
-}
 \references{
 Zucchini, W., MacDonald, I.L. and Langrock, R. 2016. Hidden Markov Models for Time Series: 
 An introduction using R, 2nd ed. CRC Press.
 }
+\author{
+Jeff Laake
+}
 \keyword{utility}
-

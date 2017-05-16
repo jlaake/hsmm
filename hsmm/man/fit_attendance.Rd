@@ -5,7 +5,8 @@
 \title{Fitting code for sea lion attendance data using hsmm}
 \usage{
 fit_attendance(df, ddl, dtf, pformula, omega, initial = NULL,
-  method = "nlminb", debug = FALSE)
+  log_prior = NULL, method = "Nelder-Mead", debug = FALSE, nll = FALSE,
+  mat = FALSE, ...)
 }
 \arguments{
 \item{df}{encounter history matrix where each row is sequence for each occasion (column)}
@@ -22,9 +23,18 @@ single parameter is allowed), and the number of time steps for the distribution 
 
 \item{initial}{vector of parameter initial values; must equal number of parameters if provided}
 
+\item{log_prior}{a function of the parameter vector that returns the log prior distribution}
+
 \item{method}{method to be used with optim; currently only a single method is supported}
 
 \item{debug}{if TRUE will print out parameter values and negative log-likelihood value at current parameter values}
+
+\item{nll}{if TRUE will return -log_likelihood function instead of optimizing}
+
+\item{mat}{if TRUE, return matrices rather than -log likelihood}
+
+\item{...}{arguments to pass to 'optimx'
+for MLE infrence. Arguments 'method' and 'debug' will be ignored.}
 }
 \value{
 fitted list of model results
@@ -79,11 +89,10 @@ par(mfrow=c(2,2))
 plot_dt(model,range=c(30,18,10,6),labels=c("pre-birth","birth","at sea","on land"))
 }
 }
-\author{
-Jeff Laake
-}
 \references{
 Zucchini, W. and I.L. MacDonald. 2009. Hidden Markov Models for Time Series: An Introduction using R. Chapman and Hall, Boca Raton, FL. See page 82.
 }
+\author{
+Jeff Laake
+}
 \keyword{utility}
-

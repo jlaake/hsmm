@@ -31,4 +31,3 @@ x=dt.values(dtf=list(fct=shifted_poisson,steps=3),10,theta=log(2))
 lines(x,type="b",lty=2,pch=2)
 
 }
-

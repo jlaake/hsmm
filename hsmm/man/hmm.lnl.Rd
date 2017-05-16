@@ -33,13 +33,12 @@ hmm.lnl which is a wrapper for the FORTRAN code hmm_like.f to compute negative l
  
 For an R version of the HMMLikelihood and related code see \code{\link{R_HMMLikelihood}}
 }
-\author{
-Jeff Laake <jeff.laake@noaa.gov>
-}
 \references{
 Zucchini, W. and I.L. MacDonald. 2009. Hidden Markov Models for Time Series: An Introduction using R. Chapman and Hall, Boca Raton, FL. 275p.
 }
 \seealso{
 R_HMMLikelihood
 }
-
+\author{
+Jeff Laake <jeff.laake@noaa.gov>
+}

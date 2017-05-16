@@ -8,7 +8,7 @@
 #' @param n number of discrete states for dwell time  
 #' @return vector of probabilities for dwell times
 #' @author Jeff Laake
-#' @export geometric shifted_poisson shifted_negbinomial shifted_binomial unstructured unstructured_gt 
+#' @export geometric shifted_poisson shifted_negbinomial shifted_binomial shifted_cmp unstructured unstructured_gt 
 #' @keywords utility
 #' @aliases shifted_poisson shifted_negbinomial shifted_binomial unstructured_gt unstructured
 #' @references Zucchini, W., MacDonald, I.L. and Langrock, R. 2016. Hidden Markov Models for Time Series: 
@@ -24,6 +24,9 @@ shifted_negbinomial=function(theta,n)
 
 shifted_binomial=function(theta,n)
 	dbinom((1:n)-1,plogis(theta))
+
+shifted_cmp = function(theta, n)
+  cmpR::dcmp((1:n)-1, exp(theta[1]), exp(theta[2]))
 
 unstructured_gt=function(theta,n)
 {
