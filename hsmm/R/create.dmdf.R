@@ -319,7 +319,7 @@ create.base.dmdf=function(x,parameter)
 	begin.num=parameter$begin+1
 	nocc=x$nocc + parameter$num
 	occasions=begin.num:(parameter$begin+nocc)
-	sl=factor(x$strata.labels)
+	sl=factor(x$strata.labels, levels=x$strata.labels)
 	nstrata=length(sl)
  	if(!is.null(x$strata.list))
 	{

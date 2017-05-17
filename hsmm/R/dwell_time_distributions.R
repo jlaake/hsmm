@@ -25,9 +25,6 @@ shifted_negbinomial=function(theta,n)
 shifted_binomial=function(theta,n)
 	dbinom((1:n)-1,plogis(theta))
 
-shifted_cmp = function(theta, n)
-  cmpR::dcmp((1:n)-1, exp(theta[1]), exp(theta[2]))
-
 unstructured_gt=function(theta,n)
 {
 	if(length(theta)!=n) stop("unstructured mismatch on parameters")
