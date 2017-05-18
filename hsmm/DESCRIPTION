@@ -10,4 +10,4 @@ Depends:
     R (>= 2.15.0), optimx (>= 2013.8.6)
 LazyLoad: yes
 License: GPL (>=2)
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

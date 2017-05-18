@@ -20,12 +20,11 @@ transition matrix for hmm to approximate hsmm
 Computes expanded transition matrix for HMM from aggregated state transition
 matrix and dwell time distributions.
 }
-\author{
-Walter Zucchini
-}
 \references{
 Zucchini, W., MacDonald, I.L. and Langrock, R. 2016. Hidden Markov Models for Time Series: 
 An introduction using R, 2nd ed. CRC Press.
 }
+\author{
+Walter Zucchini
+}
 \keyword{utility}
-
