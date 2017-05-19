@@ -8,7 +8,7 @@
 #' @param n number of discrete states for dwell time  
 #' @return vector of probabilities for dwell times
 #' @author Jeff Laake
-#' @export geometric shifted_poisson shifted_negbinomial shifted_binomial shifted_cmp unstructured unstructured_gt 
+#' @export geometric shifted_poisson shifted_negbinomial shifted_binomial unstructured unstructured_gt 
 #' @keywords utility
 #' @aliases shifted_poisson shifted_negbinomial shifted_binomial unstructured_gt unstructured
 #' @references Zucchini, W., MacDonald, I.L. and Langrock, R. 2016. Hidden Markov Models for Time Series: 

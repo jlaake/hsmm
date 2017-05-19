@@ -16,6 +16,9 @@
 #' @param method method to be used with optim; currently only a single method is supported
 #' @param debug if TRUE will print out parameter values and negative log-likelihood value at current parameter values
 #' @param nll if TRUE will return -log_likelihood function instead of optimizing 
+#' @param inc_data if TRUE, will include the data into the function returned when nll=TRUE
+#', so the function only depends on the parameter. Otherwise the function will have 2 arguments,
+#' a parameter vector (pars) and a data matrix (df)
 #' @param mat if TRUE, return matrices rather than -log likelihood
 #' @param ... arguments to pass to 'optimx'
 #' for MLE infrence. Arguments 'method' and 'debug' will be ignored.
@@ -69,7 +72,7 @@
 #' par(mfrow=c(2,2))
 #' plot_dt(model,range=c(30,18,10,6),labels=c("pre-birth","birth","at sea","on land"))
 #' }
-fit_attendance=function(df,ddl,dtf,pformula,omega,initial=NULL, log_prior=NULL, method="Nelder-Mead",debug=FALSE, nll=FALSE, mat=FALSE, ...)
+fit_attendance=function(df,ddl,dtf,pformula,omega,initial=NULL, log_prior=NULL, method="Nelder-Mead",debug=FALSE, nll=FALSE, inc_data=FALSE, mat=FALSE, ...)
 {
   # define functions fct_gamma,fct_dmat,fct_delta
   fct_dmat=function(pars,pformula,ddl,mv)
@@ -122,18 +125,20 @@ fit_attendance=function(df,ddl,dtf,pformula,omega,initial=NULL, log_prior=NULL, 
   else
     if(length(initial)!=sum(type)) 
       stop(paste("initial parameter vector not correct length. Should be length",sum(type)))
+  if(is.null(log_prior)) log_prior = function(pars) return(0)
   # call optim to fit model
-  if(!is.null(log_prior)){
+  if(!nll) inc_data = TRUE
+  if(inc_data){
     foo = function(pars){
       hsmm:::hsmm_likelihood(pars,type=type,data=df,ddl=ddl,dtf=dtf,
                              fct_gamma=fct_gamma,fct_dmat=fct_dmat,fct_delta=fct_delta,
                              pformula=pformula,omega=omega,debug=debug,mat=mat) - log_prior(pars)
     }
   } else {
-    foo = function(pars){
+    foo = function(pars, df){
       hsmm:::hsmm_likelihood(pars,type=type,data=df,ddl=ddl,dtf=dtf,
                              fct_gamma=fct_gamma,fct_dmat=fct_dmat,fct_delta=fct_delta,
-                             pformula=pformula,omega=omega,debug=debug,mat=mat)
+                             pformula=pformula,omega=omega,debug=debug,mat=mat) - log_prior(pars)
     }
   }
   
